@@ -5,27 +5,36 @@ an audio manager can play sound / bgm
 
 platform
 --------
-### iOS
+#### iOS
 * __sound :__ [OpenAL](http://www.openal.org/)
 * __bgm :__ [AVAudioPlayer](http://developer.apple.com/library/ios/#DOCUMENTATION/AVFoundation/Reference/AVAudioPlayerClassReference/Reference/Reference.html)
 * __audio file format :__ support by [Extended Audio File Services](https://developer.apple.com/library/mac/#documentation/MusicAudio/Reference/ExtendedAudioFileServicesReference/Reference/reference.html)
 
-### Mac
+#### Mac
 * __sound / bgm :__ OpenAL
 * __audio file format :__ support by Extended Audio File Services
 
-### Windows
+#### Windows
 * __sound / bgm :__ OpenAL
 * __audio file format :__ wav / ogg
 
-### Android (ndk native activity only)
+#### Android (ndk native activity only)
 * __sound :__ [SoundPool](http://developer.android.com/reference/android/media/SoundPool.html)
 * __bgm :__ [MediaPlayer](http://developer.android.com/reference/android/media/MediaPlayer.html)
 * __audio file format :__ see [Here](http://developer.android.com/guide/appendix/media-formats.html#core)
 
 install
 -------
-to be done ...
+#### iOS
+add `audio_mgr.h & cpp`, `audio_handler_al.h & cpp`, `apple/`, `ios/` into your project
+#### Mac
+add `audio_mgr.h & cpp`, `audio_handler_al.h & cpp`, `apple/` into your project
+#### Windows
+add `audio_mgr.h & cpp`, `audio_handler_al.h & cpp`, `win/` into your project
+#### Android
+1. add `audio_mgr.h & cpp`, `android/` into your ndk project (Android.mk)
+2. add [mana/android/android_helper.h](https://github.com/exe44/mana/blob/master/android/android_helper.h) into your ndk project
+3. import `android/hikaru.java` into your java project
 
 usage
 -----
