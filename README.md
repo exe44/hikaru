@@ -1,7 +1,6 @@
 hikaru
 ======
-
-an audio manager can play sound / bgm
+a c++ audio manager which can play sound / bgm
 
 platform
 --------
