@@ -18,7 +18,7 @@ platform
 * __sound / bgm :__ OpenAL
 * __audio file format :__ wav / ogg
 
-### Android
+### Android (ndk native activity only)
 * __sound :__ [SoundPool](http://developer.android.com/reference/android/media/SoundPool.html)
 * __bgm :__ [MediaPlayer](http://developer.android.com/reference/android/media/MediaPlayer.html)
 * __audio file format :__ see [Here](http://developer.android.com/guide/appendix/media-formats.html#core)
@@ -29,3 +29,8 @@ to be done ...
 
 usage
 -----
+1. `#include "audio_mgr.h"`
+2. use `hikaru::AudioMgr::Ins().Init()` to init
+3. use `hikaru::AudioMgr::Ins().Update()` in your program's main loop (for bgm fading effect)
+4. use `hikaru::AudioMgr`'s interfaces to control audio
+5. use `hikaru::AudioMgr::KillIns()` to clean up
