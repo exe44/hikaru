@@ -27,11 +27,14 @@ setup
 #### iOS
 1. add `audio_mgr.h & cpp`, `audio_handler_al.h & cpp`, `apple/`, `ios/` into your project
 2. add `OpenAL.framework`, `AudioToolbox.framework`, `AVFoundation.framework` into your project
+
 #### Mac
 1. add `audio_mgr.h & cpp`, `audio_handler_al.h & cpp`, `apple/` into your project
 2. add `OpenAL.framework`, `AudioToolbox.framework` into your project
+
 #### Windows
 add `audio_mgr.h & cpp`, `audio_handler_al.h & cpp`, `win/` into your project
+
 #### Android
 1. add `audio_mgr.h & cpp`, `android/` into your ndk project (Android.mk)
 2. add [mana/android/android_helper.h](https://github.com/exe44/mana/blob/master/android/android_helper.h) into your ndk project
