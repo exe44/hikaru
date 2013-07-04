@@ -108,19 +108,19 @@ public:
   //
 
   inline static AudioMgr& Ins()
-	{
-		if (!ins_ptr_) ins_ptr_ = new AudioMgr;
-		return *ins_ptr_;
-	}
-	
-	inline static void KillIns()
-	{
-		if (ins_ptr_)
-		{
-			delete ins_ptr_;
-			ins_ptr_ = NULL;
-		}
-	}
+  {
+    if (!ins_ptr_) ins_ptr_ = new AudioMgr;
+    return *ins_ptr_;
+  }
+
+  inline static void KillIns()
+  {
+    if (ins_ptr_)
+    {
+      delete ins_ptr_;
+      ins_ptr_ = NULL;
+    }
+  }
 
  private:
   AudioMgr();
