@@ -1,6 +1,6 @@
 hikaru
 ======
-a c++ audio manager which can play sound / bgm
+an audio manager which can play sound / bgm
 
 platform
 --------
@@ -22,12 +22,14 @@ platform
 * __bgm :__ [MediaPlayer](http://developer.android.com/reference/android/media/MediaPlayer.html)
 * __audio file format :__ see [Here](http://developer.android.com/guide/appendix/media-formats.html#core)
 
-install
--------
+setup
+-----
 #### iOS
-add `audio_mgr.h & cpp`, `audio_handler_al.h & cpp`, `apple/`, `ios/` into your project
+1. add `audio_mgr.h & cpp`, `audio_handler_al.h & cpp`, `apple/`, `ios/` into your project
+2. add `OpenAL.framework`, `AudioToolbox.framework`, `AVFoundation.framework` into your project
 #### Mac
-add `audio_mgr.h & cpp`, `audio_handler_al.h & cpp`, `apple/` into your project
+1. add `audio_mgr.h & cpp`, `audio_handler_al.h & cpp`, `apple/` into your project
+2. add `OpenAL.framework`, `AudioToolbox.framework` into your project
 #### Windows
 add `audio_mgr.h & cpp`, `audio_handler_al.h & cpp`, `win/` into your project
 #### Android
