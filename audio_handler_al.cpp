@@ -1,6 +1,8 @@
 #include "audio_handler_al.h"
 
 #include <cassert>
+#include <cstdio>
+#include <cstdlib>
 
 namespace hikaru {
 

@@ -1,6 +1,7 @@
 #include "audio_handler_al.h"
 
 #include <cassert>
+#include <cstring>
 #include <algorithm>
 #include <vorbisfile.h>
 

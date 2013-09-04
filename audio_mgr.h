@@ -11,6 +11,8 @@
 #  endif
 #elif defined(OS_ANDROID)
 #	 define HIKARU_ANDROID
+#elif defined(linux) || defined(__linux) || defined(__linux__)
+#  define HIKARU_LINUX
 #endif
 
 #include <string>

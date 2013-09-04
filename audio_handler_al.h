@@ -3,7 +3,7 @@
 
 #include "audio_mgr.h"
 
-#ifdef HIKARU_WIN
+#if defined(HIKARU_WIN) || defined(HIKARU_LINUX)
 #include <al.h>
 #include <alc.h>
 #else
