@@ -18,7 +18,7 @@ static bool IsHeadsetPluggedIn()
    "ReceiverAndMicrophone"
    "Lineout" */
   
-  NSString* routeStr = (NSString*)route;
+  NSString* routeStr = (__bridge NSString*)route;
   if (routeStr)
   {
     NSRange headRange = [routeStr rangeOfString: @"Head"];
@@ -90,7 +90,9 @@ AudioPlatformHelperIOS::AudioPlatformHelperIOS(bool need_record)
 
 AudioPlatformHelperIOS::~AudioPlatformHelperIOS()
 {
+#if !__has_feature(objc_arc)
   [bgm_player_ release];
+#endif
 }
 
 bool AudioPlatformHelperIOS::IsCanPlayBgm()
@@ -100,14 +102,22 @@ bool AudioPlatformHelperIOS::IsCanPlayBgm()
 
 bool AudioPlatformHelperIOS::PlayBgm(const std::string& resource, float volume)
 {
+#if !__has_feature(objc_arc)
   [bgm_player_ release];
+#endif
   
   NSString* file_name = [[NSString alloc] initWithUTF8String:resource.c_str()];
   NSURL* url = [[NSURL alloc] initFileURLWithPath: [[NSBundle mainBundle] pathForResource:file_name ofType:nil]];
+  
+#if !__has_feature(objc_arc)
   [file_name release];
+#endif
   
   bgm_player_ = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+  
+#if !__has_feature(objc_arc)
   [url release];
+#endif
   
   bgm_player_.numberOfLoops = -1;
   bgm_player_.volume = volume;
@@ -123,7 +133,11 @@ bool AudioPlatformHelperIOS::StopBgm()
   if (bgm_player_ != nil)
   {
     [bgm_player_ stop];
+    
+#if !__has_feature(objc_arc)
     [bgm_player_ release];
+#endif
+    
     bgm_player_ = nil;
 
     return true;

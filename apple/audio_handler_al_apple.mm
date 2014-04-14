@@ -25,12 +25,14 @@ void* GetAlAudioData(const std::string& resource,
   }
   
   // get some audio data from a wave file
-  CFURLRef fileURL = (CFURLRef)[[NSURL fileURLWithPath:[bundle pathForResource:file_name
-                                                                        ofType:nil
-                                                                   inDirectory:dir]] retain];
+  CFURLRef fileURL = (CFURLRef)CFBridgingRetain([NSURL fileURLWithPath:[bundle pathForResource:file_name
+                                                                                        ofType:nil
+                                                                                   inDirectory:dir]]);
   
+#if !__has_feature(objc_arc)
   [dir release];
   [file_name release];
+#endif
   
   if (fileURL)
   { 
