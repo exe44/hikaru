@@ -24,11 +24,13 @@ public:
   virtual bool SetBgmRate(float rate);
 
 private:
+  UInt32          is_ipod_playing_;
+
 #ifdef __OBJC__
   AVAudioPlayer*  bgm_player_;
+#else
+  void*           dummy_;
 #endif
-
-  UInt32          is_ipod_playing_;
 };
 
 } // namespace hikaru
