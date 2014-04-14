@@ -1,5 +1,7 @@
 #include "audio_platform_helper_ios.h"
 
+#import <AudioToolbox/AudioToolbox.h>
+
 namespace hikaru {
 
 static bool IsHeadsetPluggedIn()

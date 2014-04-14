@@ -76,7 +76,7 @@ void* MyGetOpenALAudioData(CFURLRef inFileURL, ALsizei *outDataSize, ALenum *out
 	// Open a file with ExtAudioFileOpen()
 	err = ExtAudioFileOpenURL(inFileURL, &extRef);
 	if(err) {
-		printf("MyGetOpenALAudioData: ExtAudioFileOpenURL FAILED, Error = %ld\n", err);
+		printf("MyGetOpenALAudioData: ExtAudioFileOpenURL FAILED, Error = %ld\n", static_cast<long>(err));
 		
 		// Dispose the ExtAudioFileRef, it is no longer needed
 		if (extRef) ExtAudioFileDispose(extRef);
@@ -86,7 +86,7 @@ void* MyGetOpenALAudioData(CFURLRef inFileURL, ALsizei *outDataSize, ALenum *out
 	// Get the audio data format
 	err = ExtAudioFileGetProperty(extRef, kExtAudioFileProperty_FileDataFormat, &thePropertySize, &theFileFormat);
 	if(err) {
-		printf("MyGetOpenALAudioData: ExtAudioFileGetProperty(kExtAudioFileProperty_FileDataFormat) FAILED, Error = %ld\n", err);
+		printf("MyGetOpenALAudioData: ExtAudioFileGetProperty(kExtAudioFileProperty_FileDataFormat) FAILED, Error = %ld\n", static_cast<long>(err));
 	
 		// Dispose the ExtAudioFileRef, it is no longer needed
 		if (extRef) ExtAudioFileDispose(extRef);
@@ -116,7 +116,7 @@ void* MyGetOpenALAudioData(CFURLRef inFileURL, ALsizei *outDataSize, ALenum *out
 	// Set the desired client (output) data format
 	err = ExtAudioFileSetProperty(extRef, kExtAudioFileProperty_ClientDataFormat, sizeof(theOutputFormat), &theOutputFormat);
 	if(err) {
-		printf("MyGetOpenALAudioData: ExtAudioFileSetProperty(kExtAudioFileProperty_ClientDataFormat) FAILED, Error = %ld\n", err);
+		printf("MyGetOpenALAudioData: ExtAudioFileSetProperty(kExtAudioFileProperty_ClientDataFormat) FAILED, Error = %ld\n", static_cast<long>(err));
 		
 		// Dispose the ExtAudioFileRef, it is no longer needed
 		if (extRef) ExtAudioFileDispose(extRef);
@@ -127,7 +127,7 @@ void* MyGetOpenALAudioData(CFURLRef inFileURL, ALsizei *outDataSize, ALenum *out
 	thePropertySize = sizeof(theFileLengthInFrames);
 	err = ExtAudioFileGetProperty(extRef, kExtAudioFileProperty_FileLengthFrames, &thePropertySize, &theFileLengthInFrames);
 	if(err) {
-		printf("MyGetOpenALAudioData: ExtAudioFileGetProperty(kExtAudioFileProperty_FileLengthFrames) FAILED, Error = %ld\n", err);
+		printf("MyGetOpenALAudioData: ExtAudioFileGetProperty(kExtAudioFileProperty_FileLengthFrames) FAILED, Error = %ld\n", static_cast<long>(err));
 		
 		// Dispose the ExtAudioFileRef, it is no longer needed
 		if (extRef) ExtAudioFileDispose(extRef);
@@ -159,7 +159,7 @@ void* MyGetOpenALAudioData(CFURLRef inFileURL, ALsizei *outDataSize, ALenum *out
 			// failure
 			free (theData);
 			theData = NULL; // make sure to return NULL
-			printf("MyGetOpenALAudioData: ExtAudioFileRead FAILED, Error = %ld\n", err);
+			printf("MyGetOpenALAudioData: ExtAudioFileRead FAILED, Error = %ld\n", static_cast<long>(err));
 		}	
 	}
 	
