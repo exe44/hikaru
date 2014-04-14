@@ -98,10 +98,10 @@ public:
 
   // bgm
 
-  void PlayBgm(const std::string& resource, float fade_out_time = 0.0f);
+  void PlayBgm(const std::string& resource, float fade_out_period = 0.0f);
   void StopBgm(float fade_out_time = 0.0f);
 
-  void SetBgmVolume(float volume);
+  void SetBgmVolume(float volume, float transition_period = 0.0f);
   void SetBgmRate(float rate);
 
   bool IsPlayingBgm();
@@ -131,9 +131,10 @@ public:
   static AudioMgr* ins_ptr_;
 
   float	bgm_volume_;
+  float	bgm_volume_transition_from_, bgm_volume_transition_to_;
+  float	bgm_volume_transition_period_, bgm_volume_transition_remain_time_;
   
-  float	bgm_fade_out_time_;
-  float	bgm_fade_out_remain_time_;
+  float	bgm_fade_out_period_, bgm_fade_out_remain_time_;
   
   std::string	wait_change_bgm_resource_;
 
