@@ -105,7 +105,7 @@ public:
   // bgm
 
   void PlayBgm(const std::string& resource, float fade_out_period = 0.0f);
-  void StopBgm(float fade_out_time = 0.0f);
+  void StopBgm(float fade_out_period = 0.0f);
 
   void SetBgmVolume(float volume, float transition_period = 0.0f);
   void SetBgmRate(float rate);
@@ -142,7 +142,7 @@ public:
   
   float	bgm_fade_out_period_, bgm_fade_out_remain_time_;
   
-  std::string	wait_change_bgm_resource_;
+  std::string	curr_bgm_resource_, wait_change_bgm_resource_;
 
   std::string force_sound_ext_, force_bgm_ext_;
 

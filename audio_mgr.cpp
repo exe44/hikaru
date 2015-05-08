@@ -85,6 +85,7 @@ void AudioMgr::Update(float delta_time)
       else
       {
         audio_handler_->StopBgm();
+        curr_bgm_resource_.clear();
       }
     }
     else
@@ -197,30 +198,69 @@ void AudioMgr::SetSoundRelativePos(int sound_id, float x, float y, float z)
 void AudioMgr::PlayBgm(const std::string& resource, float fade_out_period /*= 0.0f*/)
 {
   assert(audio_handler_);
-
+  
+  if (!curr_bgm_resource_.empty() &&
+      curr_bgm_resource_.compare(ReplaceResourceExtension(resource, force_bgm_ext_)) == 0)
+  {
+    return;
+  }
+  
   if (fade_out_period > 0.0f && audio_handler_->IsPlayingBgm())
   {
-    bgm_fade_out_period_ = bgm_fade_out_remain_time_ = fade_out_period;
+    if (bgm_fade_out_remain_time_ > 0.f)
+    {
+      if (fade_out_period < bgm_fade_out_remain_time_)
+      {
+        float ratio = bgm_fade_out_remain_time_ / bgm_fade_out_period_;
+        bgm_fade_out_period_ = fade_out_period;
+        bgm_fade_out_remain_time_ = fade_out_period * ratio;
+      }
+    }
+    else
+    {
+      bgm_fade_out_period_ = bgm_fade_out_remain_time_ = fade_out_period;
+    }
+    
     wait_change_bgm_resource_ = ReplaceResourceExtension(resource, force_bgm_ext_);
   }
   else
   {
-    audio_handler_->PlayBgm(ReplaceResourceExtension(resource, force_bgm_ext_), bgm_volume_);
+    curr_bgm_resource_ = ReplaceResourceExtension(resource, force_bgm_ext_);
+    audio_handler_->PlayBgm(curr_bgm_resource_, bgm_volume_);
+    
+    wait_change_bgm_resource_.clear();
+    bgm_fade_out_remain_time_ = 0.f;
   }
 }
 
-void AudioMgr::StopBgm(float fade_out_time /*= 0.0f*/)
+void AudioMgr::StopBgm(float fade_out_period /*= 0.0f*/)
 {
   assert(audio_handler_);
 
-  if (fade_out_time > 0.0f && audio_handler_->IsPlayingBgm())
+  if (fade_out_period > 0.0f && audio_handler_->IsPlayingBgm())
   {
-    bgm_fade_out_period_ = bgm_fade_out_remain_time_ = fade_out_time;
+    if (bgm_fade_out_remain_time_ > 0.f)
+    {
+      if (fade_out_period < bgm_fade_out_remain_time_)
+      {
+        float ratio = bgm_fade_out_remain_time_ / bgm_fade_out_period_;
+        bgm_fade_out_period_ = fade_out_period;
+        bgm_fade_out_remain_time_ = fade_out_period * ratio;
+      }
+    }
+    else
+    {
+      bgm_fade_out_period_ = bgm_fade_out_remain_time_ = fade_out_period;
+    }
   }
   else
   {
     audio_handler_->StopBgm();
+    curr_bgm_resource_.clear();
+    bgm_fade_out_remain_time_ = 0.f;
   }
+  
+  wait_change_bgm_resource_.clear();
 }
 
 void AudioMgr::SetBgmVolume(float volume, float transition_period /*= 0.0f*/)
