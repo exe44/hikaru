@@ -77,6 +77,18 @@ public class hikaru
     media_player = null;
   }
   
+  public static void AudioPause()
+  {
+    sound_pool.autoPause();
+    media_player.pause();
+  }
+  
+  public static void AudioResume()
+  {
+    sound_pool.autoResume();
+    media_player.start();
+  }
+  
   // public static void LoadSound(String resource)
   public static void LoadSound(Activity activity, String resource)
   {

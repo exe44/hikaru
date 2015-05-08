@@ -22,6 +22,22 @@ AudioHandlerAndroid::~AudioHandlerAndroid()
   caller.End();
 }
 
+void AudioHandlerAndroid::Pause()
+{
+  mana::JavaCaller caller;
+  caller.Set(hikaru_class, "AudioPause", "()V");
+  caller.env->CallStaticVoidMethod(caller.user_class, caller.user_func);
+  caller.End();
+}
+
+void AudioHandlerAndroid::Resume()
+{
+  mana::JavaCaller caller;
+  caller.Set(hikaru_class, "AudioResume", "()V");
+  caller.env->CallStaticVoidMethod(caller.user_class, caller.user_func);
+  caller.End();
+}
+
 void AudioHandlerAndroid::LoadSound(const std::string& resource)
 {
   mana::JavaCaller caller;

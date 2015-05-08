@@ -36,6 +36,9 @@ class AudioHandler
  public:
   virtual ~AudioHandler() {}
 
+  virtual void Pause() {}
+  virtual void Resume() {}
+
   // sound
   
   virtual void LoadSound(const std::string& resource) = 0;
@@ -77,8 +80,11 @@ public:
 
   void Update(float delta_time);
 
-  // sound
+  void Pause();
+  void Resume();
 
+  // sound
+  
   void LoadSound(const std::string& resource);
   void UnloadSound(const std::string& resource);
   

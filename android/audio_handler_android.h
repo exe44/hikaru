@@ -12,6 +12,9 @@ class AudioHandlerAndroid : public AudioHandler
 public:
   AudioHandlerAndroid();
   virtual ~AudioHandlerAndroid();
+
+  virtual void Pause();
+  virtual void Resume();
   
   virtual void LoadSound(const std::string& resource);
   virtual void UnloadSound(const std::string& resource);
