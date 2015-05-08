@@ -195,6 +195,13 @@ void AudioMgr::SetSoundRelativePos(int sound_id, float x, float y, float z)
   audio_handler_->SetSoundRelativePos(sound_id, x, y, z);
 }
 
+void AudioMgr::PrepareBgm(const std::string& resource)
+{
+  assert(audio_handler_);
+  
+  audio_handler_->PrepareBgm(resource);
+}
+  
 void AudioMgr::PlayBgm(const std::string& resource, float fade_out_period /*= 0.0f*/)
 {
   assert(audio_handler_);

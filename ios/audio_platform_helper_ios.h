@@ -18,6 +18,7 @@ public:
   virtual ~AudioPlatformHelperIOS();
 
   virtual bool IsCanPlayBgm();
+  virtual bool PrepareBgm(const std::string& resource);
   virtual bool PlayBgm(const std::string& resource, float volume);
   virtual bool StopBgm();
   virtual bool SetBgmVolume(float volume);
@@ -25,11 +26,15 @@ public:
 
 private:
   UInt32          is_ipod_playing_;
+  
+  std::string prepare_bgm_resource_;
 
 #ifdef __OBJC__
   AVAudioPlayer*  bgm_player_;
+  AVAudioPlayer*  prepare_bgm_player_;
 #else
   void*           dummy_;
+  void*           dummy2_;
 #endif
 };
 

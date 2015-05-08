@@ -61,6 +61,7 @@ public:
 
   // bgm
   
+  virtual void PrepareBgm(const std::string& resource);
   virtual void PlayBgm(const std::string& resource, float volume);
   virtual void StopBgm();
   

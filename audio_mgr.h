@@ -25,6 +25,7 @@ public:
   virtual ~AudioPlatformHelper() {}
     
   virtual bool IsCanPlayBgm() { return true; }
+  virtual bool PrepareBgm(const std::string& resource) { return false; }
   virtual bool PlayBgm(const std::string& resource, float volume) { return false; }
   virtual bool StopBgm() { return false; }
   virtual bool SetBgmVolume(float volume) { return false; }
@@ -61,6 +62,7 @@ class AudioHandler
 
   // bgm
 
+  virtual void PrepareBgm(const std::string& resource) = 0;
   virtual void PlayBgm(const std::string& resource, float volume) = 0;
   virtual void StopBgm() = 0;
   
@@ -103,7 +105,8 @@ public:
   void SetSoundRelativePos(int sound_id, float x, float y, float z);
 
   // bgm
-
+  
+  void PrepareBgm(const std::string& resource);
   void PlayBgm(const std::string& resource, float fade_out_period = 0.0f);
   void StopBgm(float fade_out_period = 0.0f);
 

@@ -93,6 +93,7 @@ AudioPlatformHelperIOS::AudioPlatformHelperIOS(bool need_record)
 AudioPlatformHelperIOS::~AudioPlatformHelperIOS()
 {
 #if !__has_feature(objc_arc)
+  [prepare_bgm_player_ release];
   [bgm_player_ release];
 #endif
 }
@@ -101,25 +102,61 @@ bool AudioPlatformHelperIOS::IsCanPlayBgm()
 {
   return !is_ipod_playing_;
 }
-
-bool AudioPlatformHelperIOS::PlayBgm(const std::string& resource, float volume)
+  
+bool AudioPlatformHelperIOS::PrepareBgm(const std::string& resource)
 {
+  if (0 == prepare_bgm_resource_.compare(resource))
+    return true;
+  
 #if !__has_feature(objc_arc)
-  [bgm_player_ release];
+  [prepare_bgm_player_ release];
 #endif
+  
+  prepare_bgm_player_ = nil;
+  prepare_bgm_resource_.clear();
   
   NSString* file_name = [[NSString alloc] initWithUTF8String:resource.c_str()];
   NSURL* url = [[NSURL alloc] initFileURLWithPath: [[NSBundle mainBundle] pathForResource:file_name ofType:nil]];
-  
+
 #if !__has_feature(objc_arc)
   [file_name release];
 #endif
   
-  bgm_player_ = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+  prepare_bgm_player_ = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+  if (prepare_bgm_player_)
+  {
+    prepare_bgm_resource_ = resource;
+    if (![prepare_bgm_player_ prepareToPlay])
+    {
+#if !__has_feature(objc_arc)
+      [prepare_bgm_player_ release];
+#endif
+
+      prepare_bgm_player_ = nil;
+      prepare_bgm_resource_.clear();
+    }
+  }
   
 #if !__has_feature(objc_arc)
   [url release];
 #endif
+
+  return (nil != prepare_bgm_player_);
+}
+
+bool AudioPlatformHelperIOS::PlayBgm(const std::string& resource, float volume)
+{
+  if (0 != prepare_bgm_resource_.compare(resource))
+    PrepareBgm(resource);
+  
+  if (nil == prepare_bgm_player_)
+    return false;
+
+  bgm_player_ = prepare_bgm_player_;
+
+  // clear prepare info
+  prepare_bgm_player_ = nil;
+  prepare_bgm_resource_.clear();
   
   bgm_player_.numberOfLoops = -1;
   bgm_player_.volume = volume;

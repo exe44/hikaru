@@ -152,6 +152,11 @@ void AudioHandlerAl::SetSoundRelativePos(int sound_id, float x, float y, float z
   alSourcefv(sources_[sound_id].source, AL_POSITION, sourcePosAL);
 }
 
+void AudioHandlerAl::PrepareBgm(const std::string& resource)
+{
+  platform_helper_->PrepareBgm(resource);
+}
+  
 void AudioHandlerAl::PlayBgm(const std::string& resource, float volume)
 {
   if (!platform_helper_->IsCanPlayBgm())
