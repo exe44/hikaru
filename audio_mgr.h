@@ -50,7 +50,7 @@ class AudioHandler
                         float pitch) = 0;
 
   virtual void StopSound(int sound_id, bool wait_finish) = 0;
-
+  virtual void StopAllSounds(bool wait_finish) = 0;
   virtual void SetSoundVolume(int sound_id, float volume) = 0;
   virtual void SetGlobalSoundVolume(float volume) = 0;
 

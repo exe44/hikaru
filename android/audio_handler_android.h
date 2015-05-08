@@ -21,6 +21,7 @@ public:
   
   virtual int PlaySound(const std::string& resource, bool is_loop, float volume, float pitch);
   virtual void StopSound(int sound_id, bool wait_finish);
+  virtual void StopAllSounds(bool wait_finish);
 
   virtual void SetSoundVolume(int sound_id, float volume);
   virtual void SetGlobalSoundVolume(float volume);

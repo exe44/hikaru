@@ -97,6 +97,14 @@ void AudioHandlerAndroid::StopSound(int sound_id, bool wait_finish)
   caller.End();
 }
 
+void AudioHandlerAndroid::StopAllSounds(bool wait_finish)
+{
+  mana::JavaCaller caller;
+  caller.Set(hikaru_class, "StopAllSounds", "(Z)V");
+  caller.env->CallStaticVoidMethod(caller.user_class, caller.user_func, wait_finish);
+  caller.End();
+}
+
 void AudioHandlerAndroid::SetSoundVolume(int sound_id, float volume)
 {
   mana::JavaCaller caller;

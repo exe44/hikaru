@@ -94,6 +94,20 @@ void AudioHandlerAl::StopSound(int sound_id, bool wait_finish)
   
   RemoveSource(sound_id);
 }
+  
+void AudioHandlerAl::StopAllSounds(bool wait_finish)
+{
+  for (int i = 0; i < sources_.size(); ++i)
+  {
+    if (bgm_source_ref_ != -1 && i == bgm_source_ref_)
+      continue;
+    
+    if (wait_finish)
+      alSourcei(sources_[i].source, AL_LOOPING, AL_FALSE);
+    else
+      RemoveSource(i);
+  }
+}
 
 void AudioHandlerAl::SetSoundVolume(int sound_id, float volume)
 {
@@ -459,6 +473,9 @@ int AudioHandlerAl::AddSource(int buffer_ref, bool is_loop, float volume, float 
 void AudioHandlerAl::RemoveSource(int source_ref)
 {
   assert(source_ref >= 0 && source_ref < sources_.size());
+  
+  if (-1 == sources_[source_ref].buffer_ref)
+    return;
   
   ALenum error = AL_NO_ERROR;
   

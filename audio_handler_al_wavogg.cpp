@@ -28,7 +28,7 @@ static void* GetAlAudioDataFromWav(const std::string& resource,
 
   char buff[5];
   buff[4] = 0;
-  int length, result;
+  int result;
 
   result = fread(buff, 1, 4, f);
   if (result != 4 || strcmp(buff, "RIFF") != 0)

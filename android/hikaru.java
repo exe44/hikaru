@@ -190,6 +190,11 @@ public class hikaru
     }
   }
   
+  public static void StopAllSounds(boolean wait_finish)
+  {
+    // TODO
+  }
+
   public static void SetSoundVolume(int stream_id, float volume)
   {
     if (stream_id >= 10000)
