@@ -76,7 +76,7 @@ int AudioHandlerAl::PlaySound(const std::string& resource, bool is_loop, float v
   }
   
 #ifdef AUDIO_LOG
-  printf("PlaySound %s buffer %d\n", resource.c_str(), buffer_ref);
+  fprintf(stdout, "PlaySound %s buffer %d\n", resource.c_str(), buffer_ref);
 #endif
 
   return AddSource(buffer_ref, is_loop, volume, pitch);
@@ -275,8 +275,7 @@ int AudioHandlerAl::AddBuffer(const std::string& resource)
   alGenBuffers(1, &buffer_info.buffer);
   if ((error = alGetError()) != AL_NO_ERROR)
   {
-    printf("Error(%x) generating buffer for %s\n", error, resource.c_str());
-    assert(0);
+    fprintf(stderr, "Error(%x) generating buffer for %s\n", error, resource.c_str());
     return -1;
   }
   
@@ -291,8 +290,7 @@ int AudioHandlerAl::AddBuffer(const std::string& resource)
   
   if (NULL == data)
   {
-    printf("Failed to get audio data for %s\n", resource.c_str());
-    assert(0);
+    fprintf(stderr, "Failed to get audio data for %s\n", resource.c_str());
     return -1;
   }
   
@@ -303,8 +301,7 @@ int AudioHandlerAl::AddBuffer(const std::string& resource)
   free(data);
   
   if ((error = alGetError()) != AL_NO_ERROR) {
-    printf("Error(%x) attaching audio to buffer for %s\n", error, resource.c_str());
-    assert(0);
+    fprintf(stderr, "Error(%x) attaching audio to buffer for %s\n", error, resource.c_str());
     return -1;
   }		
   
@@ -319,7 +316,7 @@ int AudioHandlerAl::AddBuffer(const std::string& resource)
       buffers_[i] = buffer_info;
       
 #ifdef AUDIO_LOG
-      printf("AddBuffer replace buffer %d\n", i);
+      fprintf(stdout, "AddBuffer replace buffer %d\n", i);
 #endif
       break;
     }
@@ -330,14 +327,14 @@ int AudioHandlerAl::AddBuffer(const std::string& resource)
     buffers_.push_back(buffer_info);
     
 #ifdef AUDIO_LOG
-    printf("AddBuffer push back buffer %d\n", i);
+    fprintf(stdout, "AddBuffer push back buffer %d\n", i);
 #endif
   }
   
   buffer_resource_map_.insert(std::make_pair(resource, i));
   
 #ifdef AUDIO_LOG
-  printf("AddBuffer to map %s -> %d\n", resource.c_str(), i);
+  fprintf(stdout, "AddBuffer to map %s -> %d\n", resource.c_str(), i);
 #endif
   
   return i;
@@ -352,7 +349,7 @@ void AudioHandlerAl::RemoveBuffer(int buffer_ref)
   buffers_[buffer_ref].reference_count = 0;
   
 #ifdef AUDIO_LOG
-  printf("RemoveBuffer %d\n", buffer_ref);
+  fprintf(stdout, "RemoveBuffer %d\n", buffer_ref);
 #endif
   
   std::map<std::string, int>::iterator itor = buffer_resource_map_.begin();
@@ -361,7 +358,7 @@ void AudioHandlerAl::RemoveBuffer(int buffer_ref)
     if (itor->second == buffer_ref)
     {
 #ifdef AUDIO_LOG
-      printf("RemoveBuffer from map %s -> %d\n", itor->first.c_str(), buffer_ref);
+      fprintf(stdout, "RemoveBuffer from map %s -> %d\n", itor->first.c_str(), buffer_ref);
 #endif
       
       buffer_resource_map_.erase(itor);
@@ -384,8 +381,7 @@ int AudioHandlerAl::AddSource(int buffer_ref, bool is_loop, float volume, float 
   alGenSources(1, &source_info.source);
   if ((error = alGetError()) != AL_NO_ERROR) 
   {
-    printf("Error(%x) generating source\n", error);
-    assert(0);
+    fprintf(stderr, "Error(%x) generating source\n", error);
     return -1;
   }
   
@@ -411,8 +407,7 @@ int AudioHandlerAl::AddSource(int buffer_ref, bool is_loop, float volume, float 
   
   if ((error = alGetError()) != AL_NO_ERROR)
   {
-    printf("Error(%x) setup source\n", error);
-    assert(0);
+    fprintf(stderr, "Error(%x) setup source\n", error);
     return -1;
   }
   
@@ -420,15 +415,14 @@ int AudioHandlerAl::AddSource(int buffer_ref, bool is_loop, float volume, float 
   alSourcePlay(source_info.source);
   if ((error = alGetError()) != AL_NO_ERROR)
   {
-    printf("Error(%x) starting source\n", error);
-    assert(0);
+    fprintf(stderr, "Error(%x) starting source\n", error);
     return -1;
   }
   
   ++buffers_[buffer_ref].reference_count;
   
 #ifdef AUDIO_LOG
-  printf("AddSource add ref count of buffer %d: %d\n", buffer_ref, buffers_[buffer_ref].reference_count);
+  fprintf(stdout, "AddSource add ref count of buffer %d: %d\n", buffer_ref, buffers_[buffer_ref].reference_count);
 #endif
   
   int i = 0;
@@ -456,7 +450,7 @@ int AudioHandlerAl::AddSource(int buffer_ref, bool is_loop, float volume, float 
       sources_[i] = source_info;
       
 #ifdef AUDIO_LOG
-      printf("AddSource replace source %d\n", i);
+      fprintf(stdout, "AddSource replace source %d\n", i);
 #endif
       
       break;
@@ -468,7 +462,7 @@ int AudioHandlerAl::AddSource(int buffer_ref, bool is_loop, float volume, float 
     sources_.push_back(source_info);
     
 #ifdef AUDIO_LOG
-    printf("AddSource push back source %d\n", i);
+    fprintf(stdout, "AddSource push back source %d\n", i);
 #endif
   }
   
@@ -487,16 +481,15 @@ void AudioHandlerAl::RemoveSource(int source_ref)
   alDeleteSources(1, &sources_[source_ref].source);
   if ((error = alGetError()) != AL_NO_ERROR)
   {
-    printf("Error(%x) deleting source %d\n", error, source_ref);
-    assert(0);
+    fprintf(stderr, "Error(%x) deleting source %d\n", error, source_ref);
   }
   
   --buffers_[sources_[source_ref].buffer_ref].reference_count;
   
 #ifdef AUDIO_LOG
-  printf("RemoveSource %d, minus ref count of buffer %d: %d\n",
-         source_ref, sources_[source_ref].buffer_ref,
-         buffers_[sources_[source_ref].buffer_ref].reference_count);
+  fprintf(stdout, "RemoveSource %d, minus ref count of buffer %d: %d\n",
+          source_ref, sources_[source_ref].buffer_ref,
+          buffers_[sources_[source_ref].buffer_ref].reference_count);
 #endif
   
   sources_[source_ref].buffer_ref = -1;
