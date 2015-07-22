@@ -126,6 +126,11 @@ void AudioHandlerAndroid::SetSoundPitch(int sound_id, float pitch)
   caller.End();
 }
 
+void AudioHandlerAndroid::PrepareBgm(const std::string& resource)
+{
+  // TODO:
+}
+
 void AudioHandlerAndroid::PlayBgm(const std::string& resource, float volume)
 {
   mana::JavaCaller caller;

@@ -47,6 +47,7 @@ static void MyPropertyListener(void* inClientData, AudioSessionPropertyID inID,
 
 AudioPlatformHelperIOS::AudioPlatformHelperIOS(bool need_record)
   : bgm_player_(nil),
+  prepare_bgm_player_(nil),
   is_ipod_playing_(0)
 {
   if (need_record)

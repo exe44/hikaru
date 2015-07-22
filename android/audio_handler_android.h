@@ -28,6 +28,7 @@ public:
 
   virtual void SetSoundPitch(int sound_id, float pitch);
 
+  virtual void PrepareBgm(const std::string& resource);
   virtual void PlayBgm(const std::string& resource, float volume);
   virtual void StopBgm();
   
