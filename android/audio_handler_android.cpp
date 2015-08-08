@@ -128,7 +128,18 @@ void AudioHandlerAndroid::SetSoundPitch(int sound_id, float pitch)
 
 void AudioHandlerAndroid::PrepareBgm(const std::string& resource)
 {
-  // TODO:
+  mana::JavaCaller caller;
+  // caller.Set(hikaru_class, "PrepareBgm", "(Ljava/lang/String)V");
+  caller.Set(hikaru_class, "PrepareBgm", "(Landroid/app/Activity;Ljava/lang/String;)V");
+
+  // std::string full_path = g_android_app->activity->internalDataPath + std::string("/") + resource;
+
+  jstring jstr_resource = caller.env->NewStringUTF(resource.c_str());
+  // caller.env->CallStaticVoidMethod(caller.user_class, caller.user_func, jstr_resource);
+  caller.env->CallStaticVoidMethod(caller.user_class, caller.user_func, g_android_app->activity->clazz, jstr_resource);
+  caller.env->DeleteLocalRef(jstr_resource);
+
+  caller.End();
 }
 
 void AudioHandlerAndroid::PlayBgm(const std::string& resource, float volume)
