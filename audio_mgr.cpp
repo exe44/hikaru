@@ -199,7 +199,7 @@ void AudioMgr::PrepareBgm(const std::string& resource)
 {
   assert(audio_handler_);
   
-  audio_handler_->PrepareBgm(resource);
+  audio_handler_->PrepareBgm(ReplaceResourceExtension(resource, force_bgm_ext_));
 }
   
 void AudioMgr::PlayBgm(const std::string& resource, float fade_out_period /*= 0.0f*/)
