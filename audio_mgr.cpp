@@ -79,8 +79,9 @@ void AudioMgr::Update(float delta_time)
     {
       if (wait_change_bgm_resource_.length() > 0)
       {
-        audio_handler_->PlayBgm(wait_change_bgm_resource_, bgm_volume_);
+        curr_bgm_resource_ = wait_change_bgm_resource_;
         wait_change_bgm_resource_.clear();
+        audio_handler_->PlayBgm(curr_bgm_resource_, bgm_volume_);
       }
       else
       {
