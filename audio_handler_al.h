@@ -41,6 +41,9 @@ class AudioHandlerAl : public AudioHandler
 public:
   AudioHandlerAl(AudioPlatformHelper* platform_helper);
   virtual ~AudioHandlerAl();
+  
+  virtual void Pause();
+  virtual void Resume();
 
   // sound
   

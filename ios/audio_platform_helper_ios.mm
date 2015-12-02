@@ -167,6 +167,25 @@ bool AudioPlatformHelperIOS::PlayBgm(const std::string& resource, float volume)
   
   return [bgm_player_ play] == YES;
 }
+  
+bool AudioPlatformHelperIOS::PauseBgm()
+{
+  if (bgm_player_ != nil)
+  {
+    [bgm_player_ pause];
+    return true;
+  }
+  
+  return false;
+}
+
+bool AudioPlatformHelperIOS::ResumeBgm()
+{
+  if (bgm_player_ != nil)
+    return [bgm_player_ play] == YES;
+  
+  return false;
+}
 
 bool AudioPlatformHelperIOS::StopBgm()
 {

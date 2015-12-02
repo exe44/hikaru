@@ -27,6 +27,8 @@ public:
   virtual bool IsCanPlayBgm() { return true; }
   virtual bool PrepareBgm(const std::string& resource) { return false; }
   virtual bool PlayBgm(const std::string& resource, float volume) { return false; }
+  virtual bool PauseBgm() { return false; }
+  virtual bool ResumeBgm() { return false; }
   virtual bool StopBgm() { return false; }
   virtual bool SetBgmVolume(float volume) { return false; }
   virtual bool SetBgmRate(float rate) { return false; }

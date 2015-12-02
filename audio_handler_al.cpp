@@ -25,6 +25,34 @@ AudioHandlerAl::~AudioHandlerAl()
 {
   ReleaseAl();
 }
+  
+void AudioHandlerAl::Pause()
+{
+  if (bgm_source_ref_ == 0)
+    platform_helper_->PauseBgm();
+  
+  ALenum error;
+  for (int i = 0; i < sources_.size(); ++i)
+  {
+    alSourcePause(sources_[i].source);
+    if ((error = alGetError()) != AL_NO_ERROR)
+      fprintf(stderr, "Error(%x) pausing source\n", error);
+  }
+}
+  
+void AudioHandlerAl::Resume()
+{
+  if (bgm_source_ref_ == 0)
+    platform_helper_->ResumeBgm();
+
+  ALenum error;
+  for (int i = 0; i < sources_.size(); ++i)
+  {
+    alSourcePlay(sources_[i].source);
+    if ((error = alGetError()) != AL_NO_ERROR)
+      fprintf(stderr, "Error(%x) resuming source\n", error);
+  }
+}
 
 void AudioHandlerAl::LoadSound(const std::string& resource)
 {
