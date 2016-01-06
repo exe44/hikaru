@@ -84,7 +84,7 @@ public class hikaru {
       prepare_media_player = null;
     }
 
-    Log.i("hikaru", "audio cleared");
+    Log.i(TAG, "audio cleared");
   }
   
   public static void AudioPause() {
