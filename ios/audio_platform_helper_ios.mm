@@ -2,82 +2,146 @@
 
 #import <AudioToolbox/AudioToolbox.h>
 
+@interface AudioSessionHelper : NSObject
+@property (assign, nonatomic) NSString* category;
++ (AudioSessionHelper*)sharedHelper;
+- (void)setup;
+@end
+
+@implementation AudioSessionHelper
+
++ (AudioSessionHelper*)sharedHelper
+{
+  static AudioSessionHelper *sharedInstance = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    sharedInstance = [[AudioSessionHelper alloc] init];
+  });
+  return sharedInstance;
+}
+
+- (instancetype)init
+{
+  self = [super init];
+  if (self)
+  {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(interruptOccur:)
+                                                 name:AVAudioSessionInterruptionNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(appBecomeActive:)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
+  }
+  return self;
+}
+
+- (void)setup
+{
+  // nothing to do ...
+}
+
+- (void)interruptOccur:(NSNotification*)notification
+{
+  NSLog(@"%@", notification.userInfo);
+  
+  switch ([notification.userInfo[AVAudioSessionInterruptionTypeKey] integerValue])
+  {
+    case AVAudioSessionInterruptionTypeBegan:
+      hikaru::AudioMgr::Ins().OnInterruptStart();
+      break;
+      
+    case AVAudioSessionInterruptionTypeEnded:
+      NSLog(@"audio session interrupt end, but we wait app become active to resume");
+      break;
+      
+    default:
+      NSAssert(0, @"invalid AVAudioSessionInterruptionNotification type!");
+      break;
+  }
+}
+
+- (void)appBecomeActive:(NSNotification*)notification
+{
+  hikaru::AudioMgr::Ins().OnInterruptEnd();
+}
+
+@end
+
+
 namespace hikaru {
 
-static bool IsHeadsetPluggedIn()
-{
-  CFStringRef route;
-  UInt32 routeSize = sizeof(CFStringRef);
-  AudioSessionGetProperty(kAudioSessionProperty_AudioRoute, &routeSize, &route);
-  
-  /* Known values of route:
-   "Headset"
-   "Headphone"
-   "Speaker"
-   "SpeakerAndMicrophone"
-   "HeadphonesAndMicrophone"
-   "HeadsetInOut"
-   "ReceiverAndMicrophone"
-   "Lineout" */
-  
-  NSString* routeStr = (__bridge NSString*)route;
-  if (routeStr)
-  {
-    NSRange headRange = [routeStr rangeOfString: @"Head"];
-    if(headRange.location != NSNotFound)
-    {
-      NSLog(@"headset plugged!");
-      return true;
-    }
-  }
-  
-  NSLog(@"headset not plugged!");
-  return false;
-}
-
-static void MyPropertyListener(void* inClientData, AudioSessionPropertyID inID,
-                               UInt32 inDataSize, const void* inData)
-{
-  if (!IsHeadsetPluggedIn())
-  {
-    UInt32 audio_route_override = kAudioSessionOverrideAudioRoute_Speaker;
-    AudioSessionSetProperty(kAudioSessionProperty_OverrideAudioRoute, sizeof(audio_route_override), &audio_route_override);
-  }
-}
+//static bool IsHeadsetPluggedIn()
+//{
+//  CFStringRef route;
+//  UInt32 routeSize = sizeof(CFStringRef);
+//  AudioSessionGetProperty(kAudioSessionProperty_AudioRoute, &routeSize, &route);
+//  
+//  /* Known values of route:
+//   "Headset"
+//   "Headphone"
+//   "Speaker"
+//   "SpeakerAndMicrophone"
+//   "HeadphonesAndMicrophone"
+//   "HeadsetInOut"
+//   "ReceiverAndMicrophone"
+//   "Lineout" */
+//  
+//  NSString* routeStr = (__bridge NSString*)route;
+//  if (routeStr)
+//  {
+//    NSRange headRange = [routeStr rangeOfString: @"Head"];
+//    if(headRange.location != NSNotFound)
+//    {
+//      NSLog(@"headset plugged!");
+//      return true;
+//    }
+//  }
+//  
+//  NSLog(@"headset not plugged!");
+//  return false;
+//}
+//
+//static void MyPropertyListener(void* inClientData, AudioSessionPropertyID inID,
+//                               UInt32 inDataSize, const void* inData)
+//{
+//  if (!IsHeadsetPluggedIn())
+//  {
+//    UInt32 audio_route_override = kAudioSessionOverrideAudioRoute_Speaker;
+//    AudioSessionSetProperty(kAudioSessionProperty_OverrideAudioRoute, sizeof(audio_route_override), &audio_route_override);
+//  }
+//}
 
 AudioPlatformHelperIOS::AudioPlatformHelperIOS(bool need_record)
   : bgm_player_(nil),
-  prepare_bgm_player_(nil),
-  is_ipod_playing_(0)
+  prepare_bgm_player_(nil)
 {
-  if (need_record)
+//  if (need_record)
+//  {
+//    [[AVAudioSession sharedInstance]
+//     setCategory: AVAudioSessionCategoryPlayAndRecord
+//     error: nil];
+//    
+//    UInt32 mix = TRUE;
+//    AudioSessionSetProperty(kAudioSessionProperty_OverrideCategoryMixWithOthers, sizeof(mix), &mix);
+//    
+//    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, MyPropertyListener, this);
+//    
+//    if (!IsHeadsetPluggedIn())
+//    {
+//      UInt32 audio_route_override = kAudioSessionOverrideAudioRoute_Speaker;
+//      AudioSessionSetProperty(kAudioSessionProperty_OverrideAudioRoute, sizeof(audio_route_override), &audio_route_override);
+//    }
+//    
+//    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+//  }
+//  else
   {
-    [[AVAudioSession sharedInstance]
-     setCategory: AVAudioSessionCategoryPlayAndRecord
-     error: nil];
-    
-    UInt32 mix = TRUE;
-    AudioSessionSetProperty(kAudioSessionProperty_OverrideCategoryMixWithOthers, sizeof(mix), &mix);
-    
-    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, MyPropertyListener, this);
-    
-    if (!IsHeadsetPluggedIn())
+    if ([[AVAudioSession sharedInstance] isOtherAudioPlaying])
     {
-      UInt32 audio_route_override = kAudioSessionOverrideAudioRoute_Speaker;
-      AudioSessionSetProperty(kAudioSessionProperty_OverrideAudioRoute, sizeof(audio_route_override), &audio_route_override);
-    }
-    
-    [[AVAudioSession sharedInstance] setActive:YES error:nil];
-  }
-  else
-  {
-    UInt32 propertySize = sizeof(is_ipod_playing_);
-    
-    AudioSessionGetProperty(kAudioSessionProperty_OtherAudioIsPlaying,
-                            &propertySize, &is_ipod_playing_);
-    
-    if (is_ipod_playing_)
-    {
+      // mix audio with other playing audio
       [[AVAudioSession sharedInstance]
        setCategory: AVAudioSessionCategoryAmbient
        error: nil];
@@ -89,6 +153,8 @@ AudioPlatformHelperIOS::AudioPlatformHelperIOS(bool need_record)
        error: nil];
     }
   }
+  
+  [[AudioSessionHelper sharedHelper] setup];
 }
 
 AudioPlatformHelperIOS::~AudioPlatformHelperIOS()
@@ -101,7 +167,7 @@ AudioPlatformHelperIOS::~AudioPlatformHelperIOS()
 
 bool AudioPlatformHelperIOS::IsCanPlayBgm()
 {
-  return !is_ipod_playing_;
+  return ![[AVAudioSession sharedInstance] isOtherAudioPlaying];
 }
   
 bool AudioPlatformHelperIOS::PrepareBgm(const std::string& resource)
@@ -225,6 +291,16 @@ bool AudioPlatformHelperIOS::SetBgmRate(float rate)
   }
 
   return false;
+}
+  
+void AudioPlatformHelperIOS::OnInterruptStart()
+{
+  // nothing to do ...
+}
+
+void AudioPlatformHelperIOS::OnInterruptEnd()
+{
+  ResumeBgm();
 }
 
 } // namespace hikaru

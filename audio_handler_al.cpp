@@ -249,6 +249,21 @@ bool AudioHandlerAl::IsPlayingBgm()
 {
   return bgm_source_ref_ != -1;
 }
+  
+void AudioHandlerAl::OnInterruptStart()
+{
+  alcMakeContextCurrent(NULL);
+  if (context_) alcSuspendContext(context_);
+}
+  
+void AudioHandlerAl::OnInterruptEnd()
+{
+  if (context_)
+  {
+    alcMakeContextCurrent(context_);
+    alcProcessContext(context_);
+  }
+}
 
 void AudioHandlerAl::InitAl()
 {

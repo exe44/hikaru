@@ -32,6 +32,9 @@ public:
   virtual bool StopBgm() { return false; }
   virtual bool SetBgmVolume(float volume) { return false; }
   virtual bool SetBgmRate(float rate) { return false; }
+  
+  virtual void OnInterruptStart() {}
+  virtual void OnInterruptEnd() {}
 };
 
 class AudioHandler
@@ -72,6 +75,11 @@ class AudioHandler
   virtual void SetBgmRate(float rate) {}
   
   virtual bool IsPlayingBgm() = 0;
+  
+  //
+  
+  virtual void OnInterruptStart() {}
+  virtual void OnInterruptEnd() {}
 };
 
 class AudioMgr
@@ -117,6 +125,11 @@ public:
 
   bool IsPlayingBgm();
   bool IsCanPlayBgm();
+  
+  //
+  
+  void OnInterruptStart();
+  void OnInterruptEnd();
 
   //
 
@@ -153,6 +166,8 @@ public:
 
   AudioHandler* audio_handler_;
   AudioPlatformHelper* platform_helper_;
+  
+  bool have_interrupt_;
 };
 
 } // namespace hikaru

@@ -25,10 +25,11 @@ public:
   virtual bool StopBgm();
   virtual bool SetBgmVolume(float volume);
   virtual bool SetBgmRate(float rate);
+  
+  virtual void OnInterruptStart();
+  virtual void OnInterruptEnd();
 
 private:
-  UInt32          is_ipod_playing_;
-  
   std::string prepare_bgm_resource_;
 
 #ifdef __OBJC__

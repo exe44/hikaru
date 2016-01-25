@@ -34,7 +34,8 @@ AudioMgr::AudioMgr()
   bgm_fade_out_remain_time_(0.f),
   bgm_volume_transition_remain_time_(0.f),
   audio_handler_(NULL),
-  platform_helper_(NULL)
+  platform_helper_(NULL),
+  have_interrupt_(false)
 {
 }
 
@@ -313,6 +314,24 @@ bool AudioMgr::IsCanPlayBgm()
   assert(platform_helper_);
 
   return platform_helper_->IsCanPlayBgm();
+}
+  
+void AudioMgr::OnInterruptStart()
+{
+  platform_helper_->OnInterruptStart();
+  audio_handler_->OnInterruptStart();
+  
+  have_interrupt_ = true;
+}
+  
+void AudioMgr::OnInterruptEnd()
+{
+  if (!have_interrupt_) return;
+  
+  platform_helper_->OnInterruptEnd();
+  audio_handler_->OnInterruptEnd();
+  
+  have_interrupt_ = false;
 }
 
 } // namespace hikaru

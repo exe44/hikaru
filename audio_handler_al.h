@@ -71,7 +71,12 @@ public:
   virtual void SetBgmVolume(float volume);
   virtual void SetBgmRate(float rate);
   
-  bool IsPlayingBgm();
+  virtual bool IsPlayingBgm();
+  
+  //
+  
+  virtual void OnInterruptStart();
+  virtual void OnInterruptEnd();
   
 private:
   void InitAl();
