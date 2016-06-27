@@ -238,6 +238,9 @@ public class hikaru {
       media_player = prepare_media_player;
       prepare_media_player = tmp;
 
+      if (null != prepare_media_player)
+        prepare_media_player.reset();
+
       prepare_bgm_resource = "";
 
       media_player.setVolume(volume, volume);
